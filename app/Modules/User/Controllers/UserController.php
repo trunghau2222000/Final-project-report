@@ -16,18 +16,32 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
+    /**
+     * User register
+     * @param $request
+     * @return reponse
+     */
     public function register(UserRegisterRequest $request)
     {
         return $this->userService->register($request);
 
     }
 
+    /**
+     * User login
+     * @param $request
+     * @return reponse
+     */
     public function login(UserLoginRequest $request)
     {
         return $this->userService->login($request);
 
     }
 
+    /**
+     * get Current User
+     * @return reponse
+     */
     public function getCurrentUser()
     {
         return $this->userService->getCurrentUser();

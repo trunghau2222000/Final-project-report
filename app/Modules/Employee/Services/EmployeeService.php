@@ -15,23 +15,21 @@ class EmployeeService implements EmployeeServiceInterface
 
     private $transformerResponse;
     private $employeeRepository;
-    private $companyRepository;
     const   ID_NOT_EXIST            =   'id does not exist';
     const   DELETE_FAILED_MESSAGE   =   'Deletion failed' ;
 
     public function __construct(
         TransformerResponse         $transformerResponse,
-        EmployeeRepositoryInterface $employeeRepository,
-        CompanyRepositoryInterface  $companyRepository
+        EmployeeRepositoryInterface $employeeRepository
     )
     {
         $this->transformerResponse = $transformerResponse;
         $this->employeeRepository  = $employeeRepository;
-        $this->companyRepository   = $companyRepository;
     }
 
     /**
-     * get all employees
+     * get list all employees
+     *
      * @return reponse
      */
     public function getAll()
@@ -68,14 +66,16 @@ class EmployeeService implements EmployeeServiceInterface
     }
 
     /**
-     * create employee
+     * Create Employee
+     *
+     * @param $requests
      * @return reponse
      */
     public function create($requests)
     {
         try {
-            $validated = $requests->validated();
-            $employee = $this->employeeRepository->create($validated);
+            $data = $requests->validated();
+            $employee = $this->employeeRepository->create($data);
             return $this->transformerResponse->response(
                 false,
                 [
@@ -105,7 +105,9 @@ class EmployeeService implements EmployeeServiceInterface
     }
 
     /**
-     * update employee to by id
+     * Update Employee to by id
+     *
+     * @param $requests, $id
      * @return reponse
      */
     public function update($requests, $id)
@@ -113,7 +115,7 @@ class EmployeeService implements EmployeeServiceInterface
         try {
 
             $validated = $requests->validated();
-            // check id
+             // check if employee id exists
             $employee = $this->employeeRepository->getById($id);
             if(empty($employee))
                 return $this->transformerResponse->response(
@@ -122,9 +124,14 @@ class EmployeeService implements EmployeeServiceInterface
                     TransformerResponse::HTTP_UNAUTHORIZED,
                     self::ID_NOT_EXIST
                 );
-
-            // update
-            $employee = $this->employeeRepository->updateById($validated, $id);
+            $data = [
+                'name'          =>  $validated['name'],
+                'email'         =>  $validated['email'],
+                'position'      =>  $validated['position'],
+                'company_id'    =>  $validated['company_id']
+            ];
+            // update employee
+            $employee = $this->employeeRepository->updateById($data, $id);
             return $this->transformerResponse->response(
                 false,
                 [
@@ -155,13 +162,15 @@ class EmployeeService implements EmployeeServiceInterface
     }
 
      /**
-     * delete employee to by id
+     * Delete Employee to by id
+     *
+     * @param $id
      * @return reponse
      */
     public function delete($id)
     {
         try {
-            // check id
+            // check if employee id exists
             $employee = $this->employeeRepository->getById($id);
             if(empty($employee))
                 return $this->transformerResponse->response(
@@ -170,7 +179,7 @@ class EmployeeService implements EmployeeServiceInterface
                     TransformerResponse::HTTP_NOT_FOUND,
                     self::ID_NOT_EXIST
                 );
-            // check and delete
+             // Check if deletion is successful or not and delete
             if(!$this->employeeRepository->deleteById($id))
                 return $this->transformerResponse->response(
                     true,
@@ -205,10 +214,16 @@ class EmployeeService implements EmployeeServiceInterface
             );
         }
     }
-
+     /**
+     * get Employees to by Company id
+     *
+     * @param $companyId
+     * @return reponse
+     */
     public function getEmployeesToByCompanyId($companyId)
     {
         try {
+            // check if company id exists
             $employees = $this->employeeRepository->getByCompanyId($companyId);
             if(empty($employees))
                 return $this->transformerResponse->response(
@@ -245,11 +260,17 @@ class EmployeeService implements EmployeeServiceInterface
         }
     }
 
+    /**
+     * get Employee to by id
+     *
+     * @param $id
+     * @return reponse
+     */
     public function getEmployee($id)
     {
         try {
+            // check if employee id exists
             $employee = $this->employeeRepository->getById($id);
-
             if(empty($employee))
                 return $this->transformerResponse->response(
                     true,

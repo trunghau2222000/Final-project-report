@@ -16,6 +16,7 @@ class UserService implements UserServiceInterface
     private $userRepository;
     const LOGIN_SUCCESS = 'Logged in successfully';
     const LOGIN_FAILED  = 'Login failed';
+
     public function __construct(
         TransformerResponse $transformerResponse,
         UserRepositoryInterface $userRepository
@@ -27,6 +28,7 @@ class UserService implements UserServiceInterface
 
     /**
      * register user
+     * @param $request
      * @return reponse
      */
     public function register($request)
@@ -34,7 +36,9 @@ class UserService implements UserServiceInterface
         try {
             $validated = $request->validated();
             $validated['password'] = bcrypt($validated['password']);
-            $user = $this->userRepository->create($validated);
+            $data = $validated;
+            // create User
+            $user = $this->userRepository->create($data);
             return $this->transformerResponse->response(
                 false,
                 [
@@ -66,6 +70,7 @@ class UserService implements UserServiceInterface
 
     /**
      * login user
+     * @param $request
      * @return reponse
      */
     public function login($request)

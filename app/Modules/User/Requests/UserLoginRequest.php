@@ -34,13 +34,26 @@ class UserLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string',
-            'password' => 'required|string',
+            'username' => 'required|string|max:15',
+            'password' => 'required|string|max:15',
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
         $this->commonRequest->validateCommonBadRequest($validator);
+    }
+
+    public function messages()
+    {
+        return [
+            'username.required' => 'Username can not be empty',
+            'username.string'   => 'Username must be of type string',
+            'username.max'      => 'The maximum length of the username is 15',
+
+            'password.required' => 'Password can not be empty',
+            'password.string'   => 'Password must be of type string',
+            'password.max'      => 'The maximum length of the password is 15',
+        ];
     }
 }

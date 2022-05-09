@@ -8,24 +8,24 @@ use App\Modules\Employee\Repositories\Interfaces\EmployeeRepositoryInterface;
 
 class EmployeeRepository implements EmployeeRepositoryInterface
 {
-    public function create($validated)
+    /** Create Company
+     *
+     * @param $data
+     * @return Array
+     */
+    public function create($data)
     {
-        return Employee::create($validated);
+        return Employee::create($data);
     }
 
     public function getAll()
     {
         return Employee::all();
     }
-    public function updateById($validated, $id)
+    public function updateById($data, $id)
     {
         return Employee::find($id)
-                ->update([
-                    'name'          =>  $validated['name'],
-                    'email'         =>  $validated['email'],
-                    'position'      =>  $validated['position'],
-                    'company_id'    =>  $validated['company_id']
-        ]);
+                        ->update($data);
     }
 
     public function deleteById($id)

@@ -33,7 +33,7 @@ class UpdateCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:50',
+            'name'    => 'required|string|max:50',
             'address' => 'required|string|max:255',
         ];
     }
@@ -42,8 +42,17 @@ class UpdateCompanyRequest extends FormRequest
     {
         $this->commonRequest->validateCommonBadRequest($validator);
     }
-    public function message()
-    {
 
+    public function messages()
+    {
+        return [
+            'name.required'  => 'Name can not be empty',
+            'name.string'    => 'Name must be of type string',
+            'name.max'       => 'The maximum length of the name is 50',
+
+            'address.required'  => 'Address can not be empty',
+            'address.string'    => 'Address must be of type string',
+            'address.max'       => 'The maximum length of the address is 225',
+        ];
     }
 }

@@ -33,14 +33,34 @@ class UserRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string|unique:users',
-            'email' => 'required|email|string',
-            'password' => 'required|string|confirmed',
+            'username' => 'required|string|max:20|unique:users',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|string|confirmed|max:15',
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
         $this->commonRequest->validateCommonBadRequest($validator);
+    }
+
+    public function messages()
+    {
+        return [
+            'username.required'  => 'Username can not be empty',
+            'username.string'    => 'Username must be of type string',
+            'username.max'       => 'The maximum length of the username is 20',
+            'username.unique'    => 'User already exists',
+
+
+            'email.required'     => 'Email can not be empty',
+            'email.email'        => 'Invalid email',
+            'email.unique'       => 'Email already exists',
+
+            'password.required'  => 'Password can not be empty',
+            'password.string'    => 'Password must be of type string',
+            'password.confirmed' => 'Confirmation password is not correct',
+            'password.max'       => 'The maximum length of the password is 15',
+        ];
     }
 }

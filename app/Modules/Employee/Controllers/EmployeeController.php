@@ -17,7 +17,8 @@ class EmployeeController extends Controller
     }
 
     /**
-     * get all employees
+     * get list all Employees
+     *
      * @return reponse
      */
     public function getAll()
@@ -26,7 +27,9 @@ class EmployeeController extends Controller
     }
 
     /**
-     * create employee
+     * Create Employee
+     *
+     * @param $requests
      * @return reponse
      */
     public function create(CreateEmployeeRequest $requests)
@@ -35,7 +38,9 @@ class EmployeeController extends Controller
     }
 
     /**
-     * update employee to by id
+     * Update Employee to by id
+     *
+     * @param $requests, $id
      * @return reponse
      */
     public function update(UpdateEmployeeRequest $requests, $id)
@@ -44,7 +49,9 @@ class EmployeeController extends Controller
     }
 
     /**
-     * delete employee to by id
+     * Delete Employee to by id
+     *
+     * @param $id
      * @return reponse
      */
     public function delete($id)
@@ -54,6 +61,8 @@ class EmployeeController extends Controller
 
     /**
      * get Employees to by Company id
+     *
+     * @param $company_id
      * @return reponse
      */
     public function getEmployeesToByCompanyId($company_id)
@@ -63,6 +72,8 @@ class EmployeeController extends Controller
 
     /**
      * get Employee to by id
+     *
+     * @param $id
      * @return reponse
      */
     public function getEmployee($id)

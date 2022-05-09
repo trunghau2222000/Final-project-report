@@ -27,9 +27,9 @@ class CompanyService implements CompanyServiceInterface
     }
 
     /**
-     * abc
+     * get list all Companies
      *
-     * @return
+     * @return reponse
      */
     public function getAll()
     {
@@ -64,11 +64,17 @@ class CompanyService implements CompanyServiceInterface
 
     }
 
+    /**
+     * Create Company
+     *
+     * @param $requests
+     * @return reponse
+     */
     public function create($requests)
     {
         try {
-            $validated = $requests->validated();
-            $company = $this->companyRepository->create($validated);
+            $data = $requests->validated();
+            $company = $this->companyRepository->create($data);
             return $this->transformerResponse->response(
                 false,
                 [
@@ -97,13 +103,19 @@ class CompanyService implements CompanyServiceInterface
         }
     }
 
+     /**
+     * Update company to by id
+     *
+     * @param $requests, $id
+     * @return reponse
+     */
     public function update($requests, $id)
     {
         try {
 
             $validated = $requests->validated();
 
-            // update
+            // check if company id exists
             $company = $this->companyRepository->getById($id);
             if(empty($company))
                 return $this->transformerResponse->response(
@@ -112,7 +124,14 @@ class CompanyService implements CompanyServiceInterface
                     TransformerResponse::HTTP_UNAUTHORIZED,
                     self::ID_NOT_EXIST
                 );
-            $company = $this->companyRepository->updateById($validated, $id);
+
+            // set value data update
+            $data = [
+                'name'    =>  $validated['name'],
+                'address' =>  $validated['address']
+            ];
+            // update Copany
+            $company = $this->companyRepository->updateById($data, $id);
             return $this->transformerResponse->response(
                 false,
                 [
@@ -142,9 +161,16 @@ class CompanyService implements CompanyServiceInterface
 
     }
 
+   /**
+     * Delete company to by id
+     *
+     * @param  $id
+     * @return reponse
+     */
     public function delete($id)
     {
         try {
+            // check if company id exists
             $company = $this->companyRepository->getById($id);
             if(empty($company)) {
                 return $this->transformerResponse->response(
@@ -154,7 +180,7 @@ class CompanyService implements CompanyServiceInterface
                     self::ID_NOT_EXIST
                 );
             }
-
+            // Check if deletion is successful or not and delete
             if(!$this->companyRepository->deleteById($id)) {
                 return $this->transformerResponse->response(
                     true,
@@ -190,11 +216,17 @@ class CompanyService implements CompanyServiceInterface
         }
     }
 
+    /**
+     * get company to by id
+     *
+     * @param  $id
+     * @return reponse
+     */
     public function getCompany($id)
     {
         try {
+            // check if company id exists
             $company = $this->companyRepository->getById($id);
-
             if(empty($company))
                 return $this->transformerResponse->response(
                     true,

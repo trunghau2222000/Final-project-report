@@ -9,9 +9,9 @@ use App\Modules\Company\Repositories\Interfaces\CompanyRepositoryInterface;
 
 class CompanyRepository implements CompanyRepositoryInterface
 {
-    public function create($validated)
+    public function create($data)
     {
-        return Company::create($validated);
+        return Company::create($data);
     }
 
     public function getAll()
@@ -19,13 +19,10 @@ class CompanyRepository implements CompanyRepositoryInterface
         return Company::all();
     }
 
-    public function updateById($validated, $id)
+    public function updateById($data, $id)
     {
         return Company::where('id', $id)
-                ->update([
-                    'name'    =>  $validated['name'],
-                    'address' =>  $validated['address']
-        ]);
+                        ->update($data);
     }
 
     public function deleteById($id)

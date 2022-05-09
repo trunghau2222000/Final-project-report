@@ -9,10 +9,11 @@ class UserRepository implements UserRepositoryInterface
 {
     /**
      * Get User Current
+     * @param $data
      * @return User
      */
-    public function create($validated)
+    public function create($data)
     {
-        return User::create($validated);
+        return User::create($data);
     }
 }
